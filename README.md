@@ -27,6 +27,5 @@ Project Title: Simple Task Management API**
     ~ created_at, updated_at
 
 **Technologies Used**
-    Frontend - Reactjs
-    Backend -  Nodejs, express framework
+    Django framework
     Database - mysql
