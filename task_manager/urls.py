@@ -22,7 +22,7 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('pages.urls')),      # landing page
-    path('users/', include('users.urls')), # user pages
-    path('api/users/', include('users.urls')),
+    # path('users/', include('users.urls')), # user pages
+    path('api/users/', include('users.urls')), #user pages
     path('tasks/', include('tasks.urls')),
 ]
