@@ -2,6 +2,9 @@ from django.shortcuts import render, redirect
 
 
 def home(req):
+    #if user logged in send to dashboard
+    if 'access_token' in req.session:
+        return redirect('dashboard_page')
     return render(req, 'pages/home.html')
 
 def dashboard_page(req):
