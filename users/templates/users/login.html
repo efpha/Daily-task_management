@@ -12,11 +12,12 @@
       <div class="card-container">
           <h1>Provide you details to proceed</h1>
             <form class="form_section" id='login_form' action="" method="post">
+                {% csrf_token %}
               <input type="email" name="email" id="email" placeholder="Email e.g. john@example.com" required>
               <input type="password" name="password" id="password" placeholder="password" required>
                 <div class="links_container">
                     <a href="">Forgot password</a>
-                    <a href="{% url 'register' %}">Create Account</a>
+                    <a href="{% url 'register_page' %}">Create Account</a>
                 </div>
 
               <button class="continue_btn" type="submit">Continue</button>
@@ -24,26 +25,5 @@
       </div>
 
   </div>
-  <script>
-      document.getElementById('login_form').addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        <!--form data-->
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
-
-        try{
-            const res = await fetch('http://127.0.0.1:8000/users/login/api/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ email, password})
-            })
-        }.catch(err){
-
-        }
-      })
-  </script>
 </body>
 </html>
