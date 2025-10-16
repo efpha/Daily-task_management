@@ -147,6 +147,11 @@ def login_page(req):
             token_data = response.json()
             req.session['access_token'] = token_data.get('access_token')
             req.session['refresh_token'] = token_data.get('refresh_token')
+
+            #save user details in session
+            user_data = token_data.get('user', {})
+            req.session['name'] = user_data.get('name', 'User')
+
             messages.success(req, 'Login successful')
             return redirect('dashboard_page')
         else:
