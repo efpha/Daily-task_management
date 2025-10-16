@@ -1,5 +1,5 @@
 from http.client import responses
-
+from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.hashers import check_password
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from .models import UserProfile
@@ -11,14 +11,6 @@ from .serializer import UserProfileSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
 import requests
 from django.contrib import messages
-
-
-# HTML pages render
-def login_view(request):
-    return render(request, 'users/login.html')
-
-def register_view(request):
-    return render(request, 'users/register.html')
 
 # register Endpoint tester
 @api_view(['GET'])
@@ -33,7 +25,7 @@ def test_register_endpoint(request):
 # login endp tester
 @api_view(['GET'])
 @permission_classes([AllowAny])
-def test_login_endpoint(req):
+def login_test(req):
     return Response(
         {
             'message': 'Login Get endpoint working'
@@ -102,6 +94,7 @@ def user_login(req):
             status=status.HTTP_404_NOT_FOUND
         )
 
+#user's profile
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def user_profile(req):
@@ -117,6 +110,7 @@ def user_profile(req):
 
 
 #register page rendering and form submission
+@csrf_exempt
 def register_page(req):
     if req.method == 'POST':
         name = req.POST.get('name')
@@ -138,20 +132,21 @@ def register_page(req):
 
 
 #Login page rendering and form submission
+@csrf_exempt
 def login_page(req):
     if req.method == 'POST':
         email = req.POST.get('email')
         password = req.POST.get('password')
 
         data = {'email': email, 'password': password}
-        api_url = 'http://127.0.0.1:8000/users/login/api'
+        api_url = 'http://127.0.0.1:8000/users/login/api/'
 
         response = requests.post(api_url, json=data)
 
         if response.status_code == 200:
             token_data = response.json()
-            req.session['access_token'] = token_data.get('access')
-            req.session['refresh_token'] = token_data.get('refresh')
+            req.session['access_token'] = token_data.get('access_token')
+            req.session['refresh_token'] = token_data.get('refresh_token')
             messages.success(req, 'Login successful')
             return redirect('dashboard_page')
         else:
@@ -159,4 +154,8 @@ def login_page(req):
 
     return render(req, 'users/login.html')
 
-
+#logout
+def logout_user(req):
+    req.session.flush()
+    messages.info(req, 'Logged out succesfully')
+    return redirect('login_page')
