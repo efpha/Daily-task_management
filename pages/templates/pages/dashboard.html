@@ -7,7 +7,7 @@
 </head>
 <body>
   <div class="container">
-    <h1>Welcome to your Dashboard</h1>
+    <h1>Welcome {{name}} to your Dashboard</h1>
     <p>You are now logged in.</p>
     <form method="POST" action="{% url 'logout_user' %}">
       {% csrf_token %}
