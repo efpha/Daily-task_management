@@ -1,0 +1,16 @@
+# Django
+*.log
+*.pot
+*.pyc
+__pycache__/
+db.sqlite3
+/media/
+staticfiles/
+.env
+
+# PyCharm
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db

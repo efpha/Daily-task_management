@@ -1,0 +1,21 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Task Manager | Welcome</title>
+    <link rel="stylesheet" href="{% static '/home.css' %}">
+</head>
+<body>
+  <div class="container">
+      <div class="login_section">
+          <a class="login_link" href="{% url 'login' %}">Login</a>
+      </div>
+      <div class="landing_center">
+          <h1>Manage Daily Task</h1>
+          <p>Organize your daily tasks efficiently.</p>
+          <a href="{% url 'register' %}">Get started</a>
+      </div>
+  </div>
+</body>
+</html>

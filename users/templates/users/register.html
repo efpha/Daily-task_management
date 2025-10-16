@@ -1,0 +1,28 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'register.css' %}">
+  <title>Task Manager | Welcome</title>
+</head>
+<body>
+  <div class="container">
+      <div class="card-container">
+          <div class="create_acc">
+              <h1>Create Account</h1>
+          </div>
+          <form class="form_section" action="" method="post">
+              <input type="text" name="name" id="name" placeholder="Your name e.g. John" required>
+              <input type="email" name="email" id="email" placeholder="e.g. john@example.com" required>
+              <input type="password" name="password" id="password" placeholder="password" required>
+              <input type="password" name="password_confirm" id="password_confirm" placeholder="Confirm password" required>
+              <div>
+                  <a class="exist_link" href="{% url 'login' %}">Have existing Account</a>
+              </div>
+              <button class="continue_btn" type="submit">Continue</button>
+          </form>
+      </div>
+  </div>
+</body>
+</html>
