@@ -5,7 +5,8 @@
 }
 
 body{
-    background-color: #fff
+    font-family: Arial, sans-serif;
+    color: #40404f;
 }
 .container{
     width: 80%;
@@ -19,7 +20,7 @@ body{
     margin: auto;
 }
 .create_acc{
-    color: #111;
+    color: #40404f;
     padding: 1rem 0.5rem;
 }
 .create_acc h1{

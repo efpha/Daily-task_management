@@ -3,14 +3,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-    <link rel="stylesheet" href="login.css">
-  <title>Task Manager | Welcome</title>
+  <title>Task Manager | Signin</title>
     <link rel="stylesheet" href="{% static 'login.css' %}">
 </head>
 <body>
   <div class="container">
       <div class="card-container">
-          <h1>Provide you details to proceed</h1>
+          <h1>Provide your details to proceed</h1>
             <form class="form_section" id='login_form' action="" method="post">
                 {% csrf_token %}
               <input type="email" name="email" id="email" placeholder="Email e.g. john@example.com" required>

@@ -3,16 +3,46 @@
 <html>
 <head>
   <title>Dashboard</title>
-  <link rel="stylesheet" href="{% static 'home.css' %}">
+  <link rel="stylesheet" href="{% static 'dashboard.css' %}">
 </head>
 <body>
   <div class="container">
-    <h1>Welcome {{name}} to your Dashboard</h1>
-    <p>You are now logged in.</p>
-    <form method="POST" action="{% url 'logout_user' %}">
-      {% csrf_token %}
-      <button type="submit">Logout</button>
-    </form>
+      <div class="side_bar">
+          <div class="side_bar_container">
+              <div class="user_profile">
+                <button class="all_btn">Profile</button>
+              </div>
+              <div class="side_link_list">
+                  <ul>
+                      <li><a href="http://">Add task</a></li>
+                      <li><a href="http://">All</a></li>
+                      <li><a href="http://">Pending</a></li>
+                      <li><a href="http://">In Progress</a></li>
+                      <li><a href="http://">Completed</a></li>
+                  </ul>
+              </div>
+              <div class="logout">
+                  <form method="POST" action="{% url 'logout_user' %}">
+                      {% csrf_token %}
+                      <button class="all_btn" type="submit" type="submit">Logout</button>
+                  </form>
+              </div>
+          </div>
+
+      </div>
+
+      <div class="content_center">
+          <div class="content_center_container">
+              <div class="title">Task</div>
+              <div class="tasks_field">
+                  <div class="empty_tasks">
+                      <h2>Create task</h2>
+                      <button class="all_btn" type="submit">Add task</button>
+                  </div>
+              </div>
+          </div>
+      </div>
+
   </div>
 </body>
 </html>

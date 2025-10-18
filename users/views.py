@@ -163,4 +163,4 @@ def login_page(req):
 def logout_user(req):
     req.session.flush()
     messages.info(req, 'Logged out succesfully')
-    return redirect('login_page')
+    return redirect('home')

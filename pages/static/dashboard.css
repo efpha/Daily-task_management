@@ -1,0 +1,142 @@
+*{
+    box-sizing: border;
+    padding: 0;
+    margin: 0;
+}
+body{
+    background-color: #fff;
+    color: #40404f;
+    font-family: Arial, sans-serif;
+}
+.container{
+    display: flex;
+    flex-direction: row;
+    width: 99.9vw;
+    height: 99.9vh;
+}
+.side_bar{
+    width: 20vw;
+    height: auto;
+    padding-left: 20px;
+    background-color: #f5f5f5;
+}
+.side_bar_container{
+    min-width:15vw;
+    max-width: 18vw;
+    height: 90vh;
+    padding: 1rem;
+    margin-top: 1rem;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+.side_link_list{
+    padding: .5rem;
+    height: 90vh;
+}
+.side_link_list ul{
+    list-style-type: none;
+    height: 60vh;
+}
+.side_link_list ul li{
+    display: flex;
+    flex-direction: row;
+    margin-top: 1rem;
+}
+/* 🔹 Sidebar Links */
+.side_link_list ul li a {
+  display: block;
+  padding: 1rem;
+  background-color: #d3d3d3;
+  width: 100%;
+  border-radius: 10px;
+  color: #40404f;
+  font-weight: bold;
+  text-decoration: none;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.side_link_list ul li a::before {
+
+  background-color: #40404f;
+  border-radius: 10px 0 0 10px;
+  transition: width 0.3s ease;
+}
+
+.side_link_list ul li a:hover {
+  color: #fff;
+  background-color: #40404f;
+}
+
+.side_link_list ul li a:hover::before {
+  width: 6px;
+}
+
+.all_btn {
+  position: relative;
+  overflow: hidden;
+  padding: 0.8rem 1.6rem;
+  border: none;
+  background-color: #40404f;
+  color: #fff;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.4s ease;
+}
+
+.all_btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: skewX(-25deg);
+  transition: left 0.6s ease;
+}
+
+.all_btn:hover::before {
+  left: 125%;
+}
+
+.all_btn:hover {
+  background-color: #2e2e38;
+}
+
+.content_center{
+    width: 80%;
+    height: 99.9vh
+}
+.content_center_container{
+    width: 85%;
+    height: 85vh;
+    margin: 0.8rem 0;
+    padding: 2rem;
+    overflow: hidden;
+
+}
+.title{
+    font-size: 2.4rem;
+    font-weight: bold;
+}
+.tasks_field {
+    height: 85vh;
+
+    display: flex;             /* enable flexbox */
+    justify-content: center;   /* horizontal centering */
+    align-items: center;       /* vertical centering */
+}
+.empty_tasks {
+    width: 40%;
+    padding: 1rem;
+    text-align: center;
+    border-radius: 8px;
+    line-height: 2.8rem;
+}
+.empty_tasks h2{
+    font-size: 2.4rem;
+}
