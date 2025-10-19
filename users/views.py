@@ -68,9 +68,8 @@ def user_login(req):
 
             # JWT tokens
             refresh = RefreshToken.for_user(user)
-
             return Response(
-                {
+            {
                     'message': 'Login success',
                     'user' : serializer.data,
                     'access_token': str(refresh.access_token),
