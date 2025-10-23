@@ -7,7 +7,6 @@ djangorestframework==3.16.1
 djangorestframework_simplejwt==5.5.1
 dotenv==0.9.9
 idna==3.11
-mysqlclient==2.2.7
 PyJWT==2.10.1
 PyMySQL==1.1.2
 python-dotenv==1.1.1
