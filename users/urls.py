@@ -11,8 +11,8 @@ urlpatterns = [
     path('logout/', views.logout_user, name='logout_user'),
 
     #API endpoints
-    path('register/api/', views.register_user, name='register_user_api'),
-    path('login/api/', views.user_login, name='user_login_api'),
+    path('register/', views.register_user, name='register_user_api'),
+    path('login/', views.user_login, name='user_login_api'),
 
     #JWT token refresh
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),

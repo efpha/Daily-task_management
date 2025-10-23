@@ -1,6 +1,6 @@
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework import status
 from .models import Task
 from .serializer import TaskSerializer
@@ -11,6 +11,7 @@ from .serializer import TaskSerializer
 @permission_classes([IsAuthenticated])
 def create_task(req):
     serializer =TaskSerializer(data=req.data)
+    print("Authenticated user:", req.user)
 
     if serializer.is_valid():
         serializer.save(user=req.user)
