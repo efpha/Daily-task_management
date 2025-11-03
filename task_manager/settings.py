@@ -28,19 +28,24 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-zi#c99#@&oa#su11xz$5gs=m#1-6dpu^5(r2*_l_=c16s)cktb'
+SECRET_KEY =os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
-    "daily-task-management-backend.onrender.com",
-    "daily-task-management-app.vercel.app",  # your frontend domain
+    '127.0.0.1',
+    'localhost:5173',
+    'daily-task-management-backend.onrender.com',
+    'daily-task-management-app.vercel.app'
 ]
 
+
 CSRF_TRUSTED_ORIGINS = [
+    "http://127.0.0.1:8000/",
     "https://daily-task-management-app.vercel.app",
     "https://daily-task-management-backend.onrender.com",
+    "http://localhost:5173",
 ]
 # Application definition
 
@@ -70,6 +75,8 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
+    "http://127.0.0.1:8000",
+    "http://localhost:5173",
     "https://daily-task-management-app.vercel.app",
 ]
 
