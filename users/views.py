@@ -158,8 +158,9 @@ def login_page(req):
 
     return render(req, 'users/login.html')
 
-#logout
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def logout_user(req):
     req.session.flush()
-    messages.info(req, 'Logged out succesfully')
-    return redirect('home')
+    messages.info(req, 'Logged out successfully')
+    return Response({"message": "Logged out successfully"}, status=200)
