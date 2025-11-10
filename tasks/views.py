@@ -78,3 +78,17 @@ def delete_task(req, pk):
             status=status.HTTP_404_NOT_FOUND
         )
 
+# mark task as completed
+@api_view(['PATCH'])
+@permission_classes([IsAuthenticated])
+def mark_task_complete(req, pk):
+    try:
+        task = Task.objects.get(pk=pk, user=req.user)
+    except Task.DoesNotExist:
+        return Response({'error': 'Task not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    task.status = 'completed'
+    task.save()
+
+    serializer = TaskSerializer(task)
+    return Response(serializer.data, status=status.HTTP_200_OK)
