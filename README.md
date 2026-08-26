@@ -1,8 +1,7 @@
 # Daily Task Management Backend
 
-Django REST API for a personal task manager. The backend provides email-based user registration and login, JWT authentication, and CRUD operations for tasks. It also contains a small set of server-rendered landing, login, registration, and dashboard templates.
-
-The React client in [`../task_frontend`](../task_frontend) consumes the API under the `/api/` prefix.
+Django REST API for a Daily Task manager.
+API under the `/api/` prefix.
 
 ## Features
 
