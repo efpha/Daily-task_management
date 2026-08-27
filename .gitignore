@@ -1,15 +1,50 @@
-# Django
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+.pyvenv/
+
+# Django and local runtime files
 *.log
 *.pot
-*.pyc
-__pycache__/
-db.sqlite3
+*.sqlite3
+*.sqlite3-*
 /media/
-staticfiles/
+/staticfiles/
+
+# Local environment files
 .env
+.env.*
+!.env.example
+
+# Test, type-checking, and lint caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+
+# Python build and package output
+build/
+dist/
+*.egg-info/
+.eggs/
 
 # PyCharm
 .idea/
+
+# VS Code
+.vscode/
 
 # OS files
 .DS_Store

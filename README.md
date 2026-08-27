@@ -38,14 +38,14 @@ task_backend/
 ├── users/
 │   ├── models.py         # UserProfile and manager
 │   ├── serializer.py     # registration/profile serialization
-│   ├── views.py          # auth API and HTML auth views
+│   ├── views.py          # authentication API views
 │   └── urls.py
 ├── tasks/
 │   ├── models.py         # Task model
 │   ├── serializer.py
 │   ├── views.py          # task API
 │   └── urls.py
-├── pages/                # landing and session-gated HTML pages
+├── pages/                # API root status endpoint
 └── */migrations/         # database migrations
 ```
 
@@ -131,13 +131,13 @@ All API URLs below are relative to `http://127.0.0.1:8000/api/`.
 
 ### Users
 
-| Method | Endpoint | Auth | Description |
-| --- | --- | --- | --- |
-| `POST` | `/users/register/` | Public | Create a user from `name`, `email`, and `password`. Returns `201` and a success message. |
-| `POST` | `/users/login/` | Public | Verify credentials and return the serialized user, `access_token`, and `refresh_token`. |
-| `POST` | `/users/token/refresh/` | Public with refresh token | Exchange `{ "refresh": "<refresh-token>" }` for a new access token. |
-| `GET` | `/users/login/test/` | Public | Authentication-route smoke test. |
-| `POST` | `/users/logout/` | JWT required | Flush the Django session and return a logout message. |
+| Method | Endpoint                | Auth                      | Description                                                                              |
+| ------ | ----------------------- | ------------------------- | ---------------------------------------------------------------------------------------- |
+| `POST` | `/users/register/`      | Public                    | Create a user from `name`, `email`, and `password`. Returns `201` and a success message. |
+| `POST` | `/users/login/`         | Public                    | Verify credentials and return the serialized user, `access_token`, and `refresh_token`.  |
+| `POST` | `/users/token/refresh/` | Public with refresh token | Exchange `{ "refresh": "<refresh-token>" }` for a new access token.                      |
+| `GET`  | `/users/login/test/`    | Public                    | Authentication-route smoke test.                                                         |
+| `POST` | `/users/logout/`        | JWT required              | Flush the Django session and return a logout message.                                    |
 
 Example registration:
 
@@ -169,25 +169,25 @@ Login returns `401` for an incorrect password and `404` when no account exists f
 
 Every task endpoint requires a valid access token. Querysets are filtered by the authenticated user, so task IDs belonging to another user behave as not found.
 
-| Method | Endpoint | Description |
-| --- | --- | --- |
-| `POST` | `/tasks/create/` | Create a task owned by the authenticated user. |
-| `GET` | `/tasks/all/` | List the authenticated user's tasks. |
-| `GET` | `/tasks/<id>/` | Retrieve one owned task. |
-| `PUT` | `/tasks/update/<id>/` | Partially update an owned task (the view uses `partial=True`). |
-| `DELETE` | `/tasks/delete/<id>/` | Delete an owned task. |
-| `PATCH` | `/tasks/complete/<id>/` | Set an owned task's status to `completed`. |
+| Method   | Endpoint                | Description                                                    |
+| -------- | ----------------------- | -------------------------------------------------------------- |
+| `POST`   | `/tasks/create/`        | Create a task owned by the authenticated user.                 |
+| `GET`    | `/tasks/all/`           | List the authenticated user's tasks.                           |
+| `GET`    | `/tasks/<id>/`          | Retrieve one owned task.                                       |
+| `PUT`    | `/tasks/update/<id>/`   | Partially update an owned task (the view uses `partial=True`). |
+| `DELETE` | `/tasks/delete/<id>/`   | Delete an owned task.                                          |
+| `PATCH`  | `/tasks/complete/<id>/` | Set an owned task's status to `completed`.                     |
 
 Task fields:
 
-| Field | Type | Notes |
-| --- | --- | --- |
-| `id` | integer | Auto-generated primary key. |
-| `title` | string | Required, maximum 255 characters. |
-| `description` | string or `null` | Optional. |
-| `due_date` | `YYYY-MM-DD` or `null` | Optional date. |
-| `status` | string | `pending` (default), `in_progress`, or `completed`. |
-| `date_created` | ISO 8601 datetime | Set by the server when the task is created. |
+| Field          | Type                   | Notes                                               |
+| -------------- | ---------------------- | --------------------------------------------------- |
+| `id`           | integer                | Auto-generated primary key.                         |
+| `title`        | string                 | Required, maximum 255 characters.                   |
+| `description`  | string or `null`       | Optional.                                           |
+| `due_date`     | `YYYY-MM-DD` or `null` | Optional date.                                      |
+| `status`       | string                 | `pending` (default), `in_progress`, or `completed`. |
+| `date_created` | ISO 8601 datetime      | Set by the server when the task is created.         |
 
 The `user` foreign key is assigned from the JWT identity and must not be supplied by the client.
 
@@ -205,18 +205,9 @@ curl -X PATCH http://127.0.0.1:8000/api/tasks/complete/1/ \
 
 Successful creation returns `201`, reads and updates return `200`, completion returns `200`, and deletion is intended to return `204`. Invalid payloads return `400`; an inaccessible or missing task returns `404`; an unauthenticated request returns `401`.
 
-## Server-rendered pages
+## API root
 
-The `pages` and `users` apps also define HTML routes outside the API:
-
-| Endpoint | Description |
-| --- | --- |
-| `/` | Landing page; redirects to `/dashboard/` when `access_token` exists in the Django session. |
-| `/dashboard/` | Session-gated dashboard template. |
-| `/api/users/login/page/` | Login template. |
-| `/api/users/register/page/` | Registration template. |
-
-The API routes and the template routes share the `/api/users/` prefix because of the project URL configuration.
+`GET /` returns a small JSON status response. The backend has no server-rendered HTML routes; the React application in [`../task_frontend`](../task_frontend) is the frontend client.
 
 ## Configuration and deployment
 
@@ -244,15 +235,12 @@ Before production deployment:
 
 ## Known implementation notes
 
-These points describe the current code and should be resolved before treating every UI flow as production-ready:
+These points describe current API and integration details:
 
-- The HTML registration and login views post to `/users/register/api/` and `/users/login/api/`, but the configured API endpoints are `/api/users/register/` and `/api/users/login/`. Use the API endpoints directly or correct those internal URLs.
 - The `user_profile` API view exists but is not included in `users/urls.py`, so there is currently no profile endpoint.
 - The frontend sends a `completed` boolean for some task updates, while this backend exposes a `status` string. Use `status: "completed"` (or the dedicated completion endpoint) until the contracts are aligned.
 - The frontend calls `users/forgot-password/`, but no password-reset route is defined in this backend.
-- The session-gated HTML dashboard and JWT-protected API use different authentication mechanisms. The HTML logout form does not itself provide a JWT `Authorization` header.
 - `DEBUG` is enabled in the checked-in settings and should not be used as-is in production.
-- `STATICFILES_DIRS` references `task_backend/static`; create that directory or remove the setting if no project-level static directory is needed.
 
 ## License
 
