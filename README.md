@@ -1,8 +1,7 @@
 # Daily Task Management Backend
 
-Django REST API for a personal task manager. The backend provides email-based user registration and login, JWT authentication, and CRUD operations for tasks.
-
-The React client in [`../task_frontend`](../task_frontend) consumes the API under the `/api/` prefix.
+Django REST API for a Daily Task manager.
+API under the `/api/` prefix.
 
 ## Features
 
@@ -132,13 +131,13 @@ All API URLs below are relative to `http://127.0.0.1:8000/api/`.
 
 ### Users
 
-| Method | Endpoint | Auth | Description |
-| --- | --- | --- | --- |
-| `POST` | `/users/register/` | Public | Create a user from `name`, `email`, and `password`. Returns `201` and a success message. |
-| `POST` | `/users/login/` | Public | Verify credentials and return the serialized user, `access_token`, and `refresh_token`. |
-| `POST` | `/users/token/refresh/` | Public with refresh token | Exchange `{ "refresh": "<refresh-token>" }` for a new access token. |
-| `GET` | `/users/login/test/` | Public | Authentication-route smoke test. |
-| `POST` | `/users/logout/` | JWT required | Flush the Django session and return a logout message. |
+| Method | Endpoint                | Auth                      | Description                                                                              |
+| ------ | ----------------------- | ------------------------- | ---------------------------------------------------------------------------------------- |
+| `POST` | `/users/register/`      | Public                    | Create a user from `name`, `email`, and `password`. Returns `201` and a success message. |
+| `POST` | `/users/login/`         | Public                    | Verify credentials and return the serialized user, `access_token`, and `refresh_token`.  |
+| `POST` | `/users/token/refresh/` | Public with refresh token | Exchange `{ "refresh": "<refresh-token>" }` for a new access token.                      |
+| `GET`  | `/users/login/test/`    | Public                    | Authentication-route smoke test.                                                         |
+| `POST` | `/users/logout/`        | JWT required              | Flush the Django session and return a logout message.                                    |
 
 Example registration:
 
@@ -170,25 +169,25 @@ Login returns `401` for an incorrect password and `404` when no account exists f
 
 Every task endpoint requires a valid access token. Querysets are filtered by the authenticated user, so task IDs belonging to another user behave as not found.
 
-| Method | Endpoint | Description |
-| --- | --- | --- |
-| `POST` | `/tasks/create/` | Create a task owned by the authenticated user. |
-| `GET` | `/tasks/all/` | List the authenticated user's tasks. |
-| `GET` | `/tasks/<id>/` | Retrieve one owned task. |
-| `PUT` | `/tasks/update/<id>/` | Partially update an owned task (the view uses `partial=True`). |
-| `DELETE` | `/tasks/delete/<id>/` | Delete an owned task. |
-| `PATCH` | `/tasks/complete/<id>/` | Set an owned task's status to `completed`. |
+| Method   | Endpoint                | Description                                                    |
+| -------- | ----------------------- | -------------------------------------------------------------- |
+| `POST`   | `/tasks/create/`        | Create a task owned by the authenticated user.                 |
+| `GET`    | `/tasks/all/`           | List the authenticated user's tasks.                           |
+| `GET`    | `/tasks/<id>/`          | Retrieve one owned task.                                       |
+| `PUT`    | `/tasks/update/<id>/`   | Partially update an owned task (the view uses `partial=True`). |
+| `DELETE` | `/tasks/delete/<id>/`   | Delete an owned task.                                          |
+| `PATCH`  | `/tasks/complete/<id>/` | Set an owned task's status to `completed`.                     |
 
 Task fields:
 
-| Field | Type | Notes |
-| --- | --- | --- |
-| `id` | integer | Auto-generated primary key. |
-| `title` | string | Required, maximum 255 characters. |
-| `description` | string or `null` | Optional. |
-| `due_date` | `YYYY-MM-DD` or `null` | Optional date. |
-| `status` | string | `pending` (default), `in_progress`, or `completed`. |
-| `date_created` | ISO 8601 datetime | Set by the server when the task is created. |
+| Field          | Type                   | Notes                                               |
+| -------------- | ---------------------- | --------------------------------------------------- |
+| `id`           | integer                | Auto-generated primary key.                         |
+| `title`        | string                 | Required, maximum 255 characters.                   |
+| `description`  | string or `null`       | Optional.                                           |
+| `due_date`     | `YYYY-MM-DD` or `null` | Optional date.                                      |
+| `status`       | string                 | `pending` (default), `in_progress`, or `completed`. |
+| `date_created` | ISO 8601 datetime      | Set by the server when the task is created.         |
 
 The `user` foreign key is assigned from the JWT identity and must not be supplied by the client.
 
