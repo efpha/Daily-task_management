@@ -1,6 +1,6 @@
 # Daily Task Management Backend
 
-Django REST API for a personal task manager. The backend provides email-based user registration and login, JWT authentication, and CRUD operations for tasks. It also contains a small set of server-rendered landing, login, registration, and dashboard templates.
+Django REST API for a personal task manager. The backend provides email-based user registration and login, JWT authentication, and CRUD operations for tasks.
 
 The React client in [`../task_frontend`](../task_frontend) consumes the API under the `/api/` prefix.
 
@@ -39,14 +39,14 @@ task_backend/
 ├── users/
 │   ├── models.py         # UserProfile and manager
 │   ├── serializer.py     # registration/profile serialization
-│   ├── views.py          # auth API and HTML auth views
+│   ├── views.py          # authentication API views
 │   └── urls.py
 ├── tasks/
 │   ├── models.py         # Task model
 │   ├── serializer.py
 │   ├── views.py          # task API
 │   └── urls.py
-├── pages/                # landing and session-gated HTML pages
+├── pages/                # API root status endpoint
 └── */migrations/         # database migrations
 ```
 
@@ -206,18 +206,9 @@ curl -X PATCH http://127.0.0.1:8000/api/tasks/complete/1/ \
 
 Successful creation returns `201`, reads and updates return `200`, completion returns `200`, and deletion is intended to return `204`. Invalid payloads return `400`; an inaccessible or missing task returns `404`; an unauthenticated request returns `401`.
 
-## Server-rendered pages
+## API root
 
-The `pages` and `users` apps also define HTML routes outside the API:
-
-| Endpoint | Description |
-| --- | --- |
-| `/` | Landing page; redirects to `/dashboard/` when `access_token` exists in the Django session. |
-| `/dashboard/` | Session-gated dashboard template. |
-| `/api/users/login/page/` | Login template. |
-| `/api/users/register/page/` | Registration template. |
-
-The API routes and the template routes share the `/api/users/` prefix because of the project URL configuration.
+`GET /` returns a small JSON status response. The backend has no server-rendered HTML routes; the React application in [`../task_frontend`](../task_frontend) is the frontend client.
 
 ## Configuration and deployment
 
@@ -245,15 +236,12 @@ Before production deployment:
 
 ## Known implementation notes
 
-These points describe the current code and should be resolved before treating every UI flow as production-ready:
+These points describe current API and integration details:
 
-- The HTML registration and login views post to `/users/register/api/` and `/users/login/api/`, but the configured API endpoints are `/api/users/register/` and `/api/users/login/`. Use the API endpoints directly or correct those internal URLs.
 - The `user_profile` API view exists but is not included in `users/urls.py`, so there is currently no profile endpoint.
 - The frontend sends a `completed` boolean for some task updates, while this backend exposes a `status` string. Use `status: "completed"` (or the dedicated completion endpoint) until the contracts are aligned.
 - The frontend calls `users/forgot-password/`, but no password-reset route is defined in this backend.
-- The session-gated HTML dashboard and JWT-protected API use different authentication mechanisms. The HTML logout form does not itself provide a JWT `Authorization` header.
 - `DEBUG` is enabled in the checked-in settings and should not be used as-is in production.
-- `STATICFILES_DIRS` references `task_backend/static`; create that directory or remove the setting if no project-level static directory is needed.
 
 ## License
 
