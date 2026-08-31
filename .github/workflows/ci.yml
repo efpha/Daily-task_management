@@ -1,0 +1,60 @@
+name: Backend CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  ci:
+    name: Django CI
+    runs-on: ubuntu-latest
+
+    env:
+      SECRET_KEY: ci-test-secret-key
+      DB_NAME: task_manager
+      DB_USER: task_manager_user
+      DB_PASSWORD: ci-test-db-password
+      DB_HOST: 127.0.0.1
+      DB_PORT: 3306
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_DATABASE: task_manager
+          MYSQL_USER: task_manager_user
+          MYSQL_PASSWORD: ci-test-db-password
+          MYSQL_ROOT_PASSWORD: ci-test-root-password
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -pci-test-root-password"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Check Django configuration
+        run: python manage.py check
+
+      - name: Check migrations
+        run: python manage.py makemigrations --check --dry-run
+
+      - name: Run tests
+        run: python manage.py test
